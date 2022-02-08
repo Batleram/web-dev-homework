@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+    wd-php:
+        image: php:7-fpm
+        volumes:
+          - ./src:/usr/share/nginx/html/
+    wd-webserver:
+        container_name: wd-nginx
+        image: nginx
+        ports:
+            - "5002:80"
+        volumes:
+            - ./default-nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./src/:/usr/share/nginx/html/
+
+networks:
+    default:
+        external: false
+        name: "tid-network"
