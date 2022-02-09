@@ -41,6 +41,7 @@ section:nth-child(even){
 
 
 section p{
+    width: 100%;
     max-height: 0px;
     transform: translateX(-100vw) ;
     text-align: left;

@@ -4,7 +4,7 @@ services:
     wd-php:
         image: php:7-fpm
         volumes:
-          - ./src:/usr/share/nginx/html/code
+          - ./src:/usr/share/nginx/html/
     wd-webserver:
         container_name: wd-nginx
         image: nginx
