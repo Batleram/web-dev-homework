@@ -3,6 +3,7 @@
 <head>
     <title>Cards</title>
     <link rel="stylesheet" href="./index.css" />
+    <link rel="stylesheet" href="./cards.css" />
 </head>
 
 <body>
@@ -14,36 +15,30 @@
             $card = "<div class=\"card\">";
 
             $card .= "<h1>Some Content</h1>";
+            $card .= "<div class=\"card-image\"></div>";
+
+            $card .= "<b>Description</b>";
+            $card .= "<p>lorem ipsum some bullshit that ill replace later lalalalalalalalala fuck bitch </p>";
+
+            $card .= "<b>Stats</b>";
+            $stats = array("Cheap money", "Stole my heart", "Bing Chilling");
+            $card .= "<ul>";
+    foreach ($stats as $stat){
+                $card .= "<li>$stat</li>";
+        }
+            $card .= "</ul>";
+
 
             $card .= "</div>";
             echo $card;
         }
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 7; $i++) {
             cardGenerator();
         }
         ?>
     </div>
     <footer>Copyright Big balls 2069</footer>
-    <style>
-        .card-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-around;
-        }
-
-        .card {
-            width: 30%;
-            height: 500px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            margin: 30px 10px;
-            border: solid var(--color4) 1.5px;
-            border-radius: 10px;
-            padding: 5px;
-        }
-    </style>
+    <script src="cards.js" type="module"></script>
 </body>
 
 </html>
