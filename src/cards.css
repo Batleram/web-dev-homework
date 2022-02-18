@@ -23,6 +23,16 @@
     padding: 5px;
 }
 
+.card p{
+    text-align: justify;
+    margin: auto 4px ;
+}
+
+.card ul{
+    width: 80%;
+    text-align: left;
+}
+
 .card-image {
     background: lightblue;
     width: 350px;

@@ -14,14 +14,14 @@
         {
             $card = "<div class=\"card\">";
 
-            $card .= "<h1>Some Content</h1>";
+            $card .= "<h1>Nom Carte</h1>";
             $card .= "<div class=\"card-image\"></div>";
 
             $card .= "<b>Description</b>";
-            $card .= "<p>lorem ipsum some bullshit that ill replace later lalalalalalalalala fuck bitch </p>";
+            $card .= "<p style=\"text-align: justify; margin: auto 4px ;\">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur cumque voluptatum aliquid totam fugiat nulla rem quam, quo, mollitia earum eius iusto fuga. Quo cupiditate odio at quam, beatae fugiat.</p>";
 
-            $card .= "<b>Stats</b>";
-            $stats = array("Cheap money", "Stole my heart", "Bing Chilling");
+            $card .= "<b>Infos</b>";
+            $stats = array("Attaque: ", "Defense: ", "Intelligence: ");
             $card .= "<ul>";
     foreach ($stats as $stat){
                 $card .= "<li>$stat</li>";
@@ -37,7 +37,7 @@
         }
         ?>
     </div>
-    <footer>Copyright Big balls 2069</footer>
+    <?php include "footer.php"; ?>
     <script src="cards.js" type="module"></script>
 </body>
 
