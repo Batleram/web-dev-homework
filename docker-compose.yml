@@ -20,4 +20,4 @@ services:
 networks:
     default:
         external: false
-        name: "tid-network"
+        name: "wd-network"
