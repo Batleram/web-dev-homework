@@ -1,0 +1,40 @@
+.card-container {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+.card-container::after {
+    content: "";
+    flex: auto;
+}
+
+.card {
+    width: 400px;
+    height: 600px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
+    margin: 30px 10px;
+    border: solid var(--color4) 1.5px;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.card p{
+    text-align: justify;
+    margin: auto 4px ;
+}
+
+.card ul{
+    width: 80%;
+    text-align: left;
+}
+
+.card-image {
+    background: lightblue;
+    width: 350px;
+    height: 350px;
+}
