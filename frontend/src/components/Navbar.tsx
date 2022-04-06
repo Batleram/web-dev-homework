@@ -1,21 +1,22 @@
 import React from "react"
 import "../styles/Navbar.component.css"
+import { Link } from "react-router-dom"
 
 export const Navbar = () => {
     return (
         <nav id="navigation-bar">
-            <a className="navigation-link" href="index.php">
+            <Link to="/" className="navigation-link">
                 <h3>Home</h3>
-            </a>
-            <a className="navigation-link" href="cards.php">
+            </Link>
+            <Link to="/cards" className="navigation-link">
                 <h3>Cards</h3>
-            </a>
-            <a className="navigation-link" href="wiki.php">
+            </Link>
+            <Link to="wiki" className="navigation-link">
                 <h3>Wiki</h3>
-            </a>
-            <a className="navigation-link" href="references.php">
+            </Link>
+            <Link to="references" className="navigation-link">
                 <h3>References</h3>
-            </a>
+            </Link>
         </nav>
     )
 }
