@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar } from './components';
+import { Footer, Navbar } from './components';
 import { Cards, Landing, References, Wiki } from './pages';
 import { Routes, Route } from "react-router-dom"
 
@@ -14,6 +14,7 @@ export const App = () => {
 
                 <Route path="*" element={<Landing />} />
             </Routes>
+            <Footer/>
 
 
         </div>
