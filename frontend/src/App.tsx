@@ -14,7 +14,7 @@ export const App = () => {
 
                 <Route path="*" element={<Landing />} />
             </Routes>
-            <Footer/>
+            <Footer />
 
 
         </div>

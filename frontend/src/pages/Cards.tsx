@@ -1,24 +1,30 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import * as THREE from "three"
 import { Canvas, useFrame } from "@react-three/fiber"
 import "../styles/Cards.page.css"
 import { BackSide } from 'three'
 
 export const Cards = () => {
+    const [cards, setCards]: [any[], Function] = useState<any[]>([]);
+
+    useEffect(() => {
+        fetch("/api/v1/cards.php", { method: "GET" }).then(res => res.json()).then(data => {
+            setCards(data);
+            console.log(data)
+        });
+    }, [])
+
     return (
         <div className="card-container">
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
+            {cards.map((value, index) => {
+                return <Card key={index} card={value} />
+            })
+            }
         </div>
     )
 }
 
-const Card = () => {
+const Card = (props: { card: { positions: [number, number][] } }) => {
     const stats = ["Attaque: ", "Defense: ", "Intelligence: "]
     const camera = new THREE.PerspectiveCamera(
         45,
@@ -30,14 +36,13 @@ const Card = () => {
     camera.lookAt(0, 0, 0);
 
     return (
-
         <div className="card">
             <h1>Nom Carte</h1>
             <div className="card-image">
                 <Canvas camera={camera} >
                     <color attach="background" args={["black"]} />
                     <directionalLight position={[0, 5.0, 5.1]} castShadow={true} />
-                    <Shape position={[0, 0, 0]} />
+                    <Shape position={[0, 0, 0]} vertices={props.card.positions} />
                 </Canvas>
             </div>
             <b>Description</b>
@@ -54,29 +59,30 @@ const Card = () => {
     )
 }
 
-const Shape = (props: any) => {
+const Shape = (props: { position: [number, number, number], vertices: [number, number][] }) => {
     const mesh: any = useRef()
 
     const shape = new THREE.Shape();
 
     let x = 0,
         y = 0;
-    let positions = [];
-    let complexity = getRndInteger(5, 12);
-    for (let i = 0; i < complexity; i++) {
-        positions.push([getRndFloat(-20, 20), getRndFloat(-20, 20)]);
-    }
-    shape.moveTo(x, y);
+    let positions = props.vertices;
+    // let complexity = getRndInteger(5, 12);
+    // for (let i = 0; i < complexity; i++) {
+    //     positions.push([getRndFloat(-20, 20), getRndFloat(-20, 20)]);
+    // }
+    shape.moveTo(positions[0][0], positions[0][1]);
 
-    positions.forEach(function(pos) {
-        shape.bezierCurveTo(
-            x + pos[0],
-            y,
-            x,
-            y + pos[1],
-            x + pos[0],
-            y + pos[1]
-        );
+    positions.slice(1).forEach(function(pos: [number, number]) {
+        shape.lineTo(pos[0], pos[1])
+        // shape.bezierCurveTo(
+        //     x + pos[0],
+        //     y,
+        //     x,
+        //     y + pos[1],
+        //     x + pos[0],
+        //     y + pos[1]
+        // );
     });
 
     let color = getRndInteger(0, 16777215);
@@ -87,7 +93,7 @@ const Shape = (props: any) => {
     })
     // Return view, these are regular three.js elements expressed in JSX
     return (
-        <mesh {...props} ref={mesh}>
+        <mesh position={props.position} ref={mesh}>
             <shapeGeometry args={[shape]} />
             <meshPhongMaterial color={color} />
         </mesh >
