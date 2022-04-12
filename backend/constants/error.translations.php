@@ -27,7 +27,10 @@ $errors = array(
     ),
     "INVALID_EMAIL" => array(
         "FRENCH" => "Couriel invalide"
-    )
+    ),
+    "INVALID_CREDENTIALS" => array(
+        "FRENCH" => "Le nom d'utilisateur ou le mot de passe sont invalides"
+    ),
 );
 
 define("errors", $errors);

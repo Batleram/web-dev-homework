@@ -3,7 +3,8 @@ include_once "../root-dir.php";
 include_once ROOT . '/validations/userManagement.validations.php';
 include_once ROOT . '/helpers/error.decoder.php';
 include_once ROOT . "/services/userManagement.service.php";
-include_once ROOT ."/services/hashing.service.php";
+include_once ROOT . "/services/hashing.service.php";
+include_once ROOT . "/services/sessionManagement.service.php";
 
 function loginPost()
 {
@@ -29,6 +30,29 @@ function loginPost()
     }
     // reasign it so we have an apropriately named username variable to work with
     $validated_username = $validated_username[0];
+
+    // get the user from the database
+    $userInfo = getUserFromName($validated_username);
+    if (count($userInfo) < 1) {
+        echo decode_error("INVALID_CREDENTIALS");
+        return;
+    }
+    $userInfo = $userInfo[0];
+
+    // authenticate the password
+    if (!comparePasswordHash($json_body["password"], $userInfo["password_hash"])) {
+        echo decode_error("INVALID_CREDENTIALS");
+        return;
+    }
+
+    // this should always be false, but just in case
+    if ($json_body["username"] != $userInfo["username"]) {
+        echo decode_error("INVALID_CREDENTIALS");
+        return;
+    }
+
+    startSession();
+    setSessionData("username", $json_body["username"]);
 }
 
 function signupPost()
@@ -69,4 +93,10 @@ function signupPost()
     $validated_username = $validated_username[0];
 
     addUser($validated_username, hashPassword($json_body["password"]));
+}
+
+function logoutGet()
+{
+    startSession();
+    destroySession();
 }

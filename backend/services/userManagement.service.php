@@ -10,3 +10,12 @@ function addUser($username, $password_hash)
     $statement->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
     $statement->execute();
 }
+
+function getUserFromName($username)
+{
+    $db_connection = new PDO(DB_DSN, DB_USER, DB_PASS);
+    $statement  = $db_connection->prepare("SELECT * from `users` where `username` = :username LIMIT 1;");
+    $statement->bindParam(':username', $username, PDO::PARAM_STR);
+    $statement->execute();
+    return $statement->fetchAll();
+}
