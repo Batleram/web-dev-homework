@@ -64,13 +64,7 @@ const Shape = (props: { position: [number, number, number], vertices: [number, n
 
     const shape = new THREE.Shape();
 
-    let x = 0,
-        y = 0;
     let positions = props.vertices;
-    // let complexity = getRndInteger(5, 12);
-    // for (let i = 0; i < complexity; i++) {
-    //     positions.push([getRndFloat(-20, 20), getRndFloat(-20, 20)]);
-    // }
     shape.moveTo(positions[0][0], positions[0][1]);
 
     positions.slice(1).forEach(function(pos: [number, number]) {
@@ -88,10 +82,10 @@ const Shape = (props: { position: [number, number, number], vertices: [number, n
     let color = getRndInteger(0, 16777215);
 
     let rotationspeed = getRndFloat(-0.06, 0.06) / 10;
-    useFrame((state, delta) => {
-        mesh.current.rotation.z += 0.01;
+    useFrame((_state, _delta) => {
+        mesh.current.rotation.z += rotationspeed;
     })
-    // Return view, these are regular three.js elements expressed in JSX
+
     return (
         <mesh position={props.position} ref={mesh}>
             <shapeGeometry args={[shape]} />
