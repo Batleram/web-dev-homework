@@ -1,2 +1,2 @@
 <?php
-define("DEFAULT_ERROR_LANG" ,"FRENCH");
+define("DEFAULT_ERROR_LANG", "FRENCH");

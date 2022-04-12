@@ -8,11 +8,29 @@ services:
         volumes:
           - ./public:/srv/build
     wd-php-backend:
-        container_name: wd-php-parser
-        restart: unless-stopped
-        image: php:7-fpm
-        volumes:
-            - ./backend:/usr/share/nginx/html
+      container_name: wd-php-parser
+      restart: unless-stopped
+      build:
+        context: ./backend
+      environment:
+        - DBHOST=wd-database
+        - DB=wd
+        - DBUSER=${DBUSER}
+        - DBPASS=${DBPASS}
+      volumes:
+          - ./backend:/usr/share/nginx/html
+
+    # wd-php-backend:
+    #     container_name: wd-php-parser
+    #     restart: unless-stopped
+    #     image: php:7-fpm
+    #     environment:
+    #       - DBHOST=wd-database
+    #       - DB=wd
+    #       - DBUSER=${DBUSER}
+    #       - DBPASS=${DBPASS}
+    #     volumes:
+    #         - ./backend:/usr/share/nginx/html
     wd-webserver:
         container_name: wd-nginx
         restart: unless-stopped
@@ -22,6 +40,18 @@ services:
         volumes:
             - ./default-nginx.conf:/etc/nginx/conf.d/default.conf
             - ./public:/usr/share/nginx/html
+    wd-database:
+        container_name: wd-database
+        restart: always
+        image: mariadb
+        environment:
+          - MYSQL_DATABASE=wd
+          - MYSQL_ROOT_PASSWORD=${ROOTPASS}
+          - MYSQL_USER=${DBUSER}
+          - MYSQL_PASSWORD=${DBPASS}
+        volumes:
+          - ./mariadb.entrypoint.sql:/docker-entrypoint-initdb.d/mariadb.entrypoint.sql
+          - ./mysql:/var/lib/mysql
 networks:
     default:
         external: false

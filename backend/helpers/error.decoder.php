@@ -16,6 +16,7 @@ function decode_error($error)
             return;
         }
 
+        error_log("$error is not implemented");
         // fallback error
         echo "Une exception est arrivée, réessayez plus tard";
         return;
@@ -27,6 +28,7 @@ function decode_error($error)
         return;
     }
 
+    error_log("$error is not implemented");
     // fallback fallback error
     echo "Une exception est arrivée, réessayez plus tard";
 }
