@@ -31,6 +31,9 @@ $errors = array(
     "INVALID_CREDENTIALS" => array(
         "FRENCH" => "Le nom d'utilisateur ou le mot de passe sont invalides"
     ),
+    "USER_ALREADY_TAKEN" => array(
+        "FRENCH" => "Le nom d'utilisateur est déjà utilisé"
+    ),
 );
 
 define("errors", $errors);

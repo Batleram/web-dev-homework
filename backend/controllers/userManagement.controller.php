@@ -92,7 +92,17 @@ function signupPost()
     // reasign it so we have an apropriately named username variable to work with
     $validated_username = $validated_username[0];
 
+    // check if user exists
+    $userInfo = getUserFromName($validated_username);
+    if (count($userInfo) != 0) {
+        echo decode_error("USER_ALREADY_TAKEN");
+        return;
+    }
+    $userInfo = $userInfo[0];
+
     addUser($validated_username, hashPassword($json_body["password"]));
+    startSession();
+    setSessionData("username", $json_body["username"]);
 }
 
 function logoutGet()

@@ -6,9 +6,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
         loginPost();
         break;
-    case 'GET':
-        testSession();
-        break;
     default:
         echo "unimplemented";
         break;
