@@ -1,0 +1,22 @@
+:root {
+    --color1: #700c20;
+    --color2: #e7680d;
+    --color3: #fae361;
+    --color4: #90ee76;
+    --color5: #231fa7;
+    --background-color: #fafafa;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+* {
+    font-family: noto sans-serif;
+    margin: 0px;
+    padding: 0px;
+}
+
