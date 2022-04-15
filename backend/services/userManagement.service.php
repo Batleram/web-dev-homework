@@ -9,6 +9,11 @@ function addUser($username, $password_hash)
     $statement->bindParam(':username', $username, PDO::PARAM_STR);
     $statement->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
     $statement->execute();
+
+    // set basic read permission to new user
+    $statement  = $db_connection->prepare("call add_user_permission(:username, \"READ_CARD\");");
+    $statement->bindParam(':username', $username, PDO::PARAM_STR);
+    $statement->execute();
 }
 
 function getUserFromName($username)
