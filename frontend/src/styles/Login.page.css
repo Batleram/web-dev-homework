@@ -34,3 +34,9 @@
     flex-direction: column;
     flex:1;
 }
+
+#login-error-message{
+    text-align: center;
+    color:var(--color1);
+
+}

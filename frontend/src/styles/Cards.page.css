@@ -43,3 +43,8 @@
     text-align: justify;
     margin: auto 4px;
 }
+
+#cards-error-message{
+    text-align: center;
+    color:var(--color1);
+}

@@ -10,9 +10,11 @@ export const Navbar = () => {
             <Link to="/" className="navigation-link">
                 <h3>Home</h3>
             </Link>
-            <Link to="/cards" className="navigation-link">
-                <h3>Cards</h3>
-            </Link>
+            {user?.isLoggedIn &&
+                <Link to="/cards" className="navigation-link">
+                    <h3>Cards</h3>
+                </Link>
+            }
             <Link to="wiki" className="navigation-link">
                 <h3>Wiki</h3>
             </Link>

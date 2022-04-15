@@ -33,15 +33,18 @@ export const Cards = () => {
     }, [])
 
     return (
-        <div className="card-container">
+        <>
             {error !== "" &&
                 <p id="cards-error-message">{error}</p>
             }
-            {cards && cards.map((value, index) => {
-                return <Card key={index} card={value} />
-            })
+            <div className="card-container">
+                {
+                    cards && cards.map((value, index) => {
+                        return <Card key={index} card={value} />
+                })
             }
-        </div>
+            </div>
+        </>
     )
 }
 
