@@ -6,6 +6,7 @@ include_once ROOT . "/constants/error.translations.php";
 function decode_error($error)
 {
     $json_body = json_decode(file_get_contents("php://input"), true);
+    http_response_code(403);
 
     // check if the user wants a specific language
     if (isset($json_body["ERROR_LANG"])) {

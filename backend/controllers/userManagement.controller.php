@@ -78,7 +78,7 @@ function signupPost()
     }
 
     // if password and password confirmations are different
-    if ($json_body["password" != $json_body["password_confirm"]]) {
+    if ($json_body["password"] != $json_body["password_confirm"]) {
         echo decode_error("PASSWORD_CONFIRM_DIFFERENT");
         return;
     }
@@ -101,7 +101,9 @@ function signupPost()
     $userInfo = $userInfo[0];
 
     addUser($validated_username, hashPassword($json_body["password"]));
-    startSession();
+    if (!validateSession()) {
+        startSession();
+    }
     setSessionData("username", $json_body["username"]);
 }
 
