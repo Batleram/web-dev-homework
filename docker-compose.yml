@@ -34,7 +34,7 @@ services:
     wd-webserver:
         container_name: wd-nginx
         restart: unless-stopped
-        image: nginx
+        image: nginx:1.21.6
         ports:
             - "5002:80"
         volumes:
@@ -43,7 +43,7 @@ services:
     wd-database:
         container_name: wd-database
         restart: always
-        image: mariadb
+        image: mariadb:10.6.7
         environment:
           - MYSQL_DATABASE=wd
           - MYSQL_ROOT_PASSWORD=${ROOTPASS}
