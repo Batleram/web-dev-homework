@@ -3,6 +3,6 @@ import "../styles/Footer.component.css"
 
 export const Footer = () => {
     return (
-        <footer id="footer">Copyright Batleram 2069&trade;</footer>
+        <footer id="footer">Copyright Batleram 2022&trade;</footer>
     )
 }

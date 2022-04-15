@@ -8,11 +8,11 @@ export const Navbar = () => {
     return (
         <nav id="navigation-bar">
             <Link to="/" className="navigation-link">
-                <h3>Home</h3>
+                <h3>Acceuil</h3>
             </Link>
             {user?.isLoggedIn &&
                 <Link to="/cards" className="navigation-link">
-                    <h3>Cards</h3>
+                    <h3>Cartes</h3>
                 </Link>
             }
             <Link to="wiki" className="navigation-link">
@@ -25,14 +25,14 @@ export const Navbar = () => {
             {user?.isLoggedIn ?
                 <>
                     <Link to="logout" className="navigation-link">
-                        <h3>Logout</h3>
+                        <h3>Deconnexion</h3>
                     </Link>
                 </> : <>
                     <Link to="login" className="navigation-link">
-                        <h3>Login</h3>
+                        <h3>Connexion</h3>
                     </Link>
                     <Link to="signup" className="navigation-link">
-                        <h3>SignUp</h3>
+                        <h3>Creer un compte</h3>
                     </Link>
                 </>
             }
