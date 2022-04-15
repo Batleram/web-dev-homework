@@ -4,6 +4,7 @@ include_once ROOT . "/services/sessionManagement.service.php";
 
 function isLoggedIn()
 {
+    startSession();
     if (validateSession()) {
         echo json_encode(
             array(

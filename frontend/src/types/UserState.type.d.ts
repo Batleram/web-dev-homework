@@ -1,9 +1,9 @@
 interface UserState {
     username: string | null;
     isLoggedIn: bool;
-} 
+}
 
-interface UserContext{
+interface UserContext {
     user: UserState | null,
-    setUser: (u:UserState) => void
+    setUser: (u: UserState) => void
 }

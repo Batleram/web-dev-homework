@@ -25,6 +25,7 @@ function setSessionData($key, $value)
 
 function validateSession()
 {
+    startSession();
     return isset($_SESSION["username"]) && !empty($_SESSION["username"]);
 }
 

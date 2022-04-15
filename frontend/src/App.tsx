@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Footer, Navbar } from './components';
 import { Cards, Landing, References, Wiki, Login, Signup, Logout } from './pages';
 import { Routes, Route, Navigate } from "react-router-dom"
@@ -11,6 +11,24 @@ export const App = () => {
     })
 
     const value = useMemo(() => ({ user, setUser }), [user, setUser])
+
+
+    useEffect(() => {
+        fetch("/api/v1/isloggedin.php", { method: "GET" })
+            .then(res => {
+                return res.json()
+            }).then((data: { LOGIN_STATE: boolean, USERNAME: string }) => {
+                if (data?.LOGIN_STATE) {
+                    setUser({
+                        username: data?.USERNAME,
+                        isLoggedIn: true
+                    })
+                }
+            }).catch(err => {
+                console.error(err)
+            })
+
+    }, [])
 
     return (
         <div className="App">

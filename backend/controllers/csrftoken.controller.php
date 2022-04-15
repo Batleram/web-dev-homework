@@ -4,7 +4,9 @@ include_once ROOT . "/services/sessionManagement.service.php";
 
 function getCSRFToken()
 {
-    startSession();
+    if (!validateSession()) {
+        startSession();
+    }
 
     $CSRF_TOKEN = md5(uniqid(mt_rand(), true));
     $_SESSION["CSRF_TOKEN"] = $CSRF_TOKEN;

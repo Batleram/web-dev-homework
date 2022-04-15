@@ -16,8 +16,8 @@ export const Logout = (props: {}) => {
 
         }).catch(e => {
             console.error(e);
-                navigate("/");
-         
+            navigate("/");
+
         })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
