@@ -13,6 +13,7 @@ function decode_error($error)
 
         // check if that required error exists
         if (isset(errors[$error][$json_body["ERROR_LANG"]])) {
+            error_log(errors[$error][$json_body["ERROR_LANG"]]);
             echo errors[$error][$json_body["ERROR_LANG"]];
             return;
         }
@@ -25,6 +26,7 @@ function decode_error($error)
 
     // check if the required error exists in default langauge
     if (isset(errors[$error][DEFAULT_ERROR_LANG])) {
+        error_log(errors[$error][DEFAULT_ERROR_LANG]);
         echo errors[$error][DEFAULT_ERROR_LANG];
         return;
     }
