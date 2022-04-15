@@ -6,17 +6,38 @@ import { BackSide } from 'three'
 
 export const Cards = () => {
     const [cards, setCards]: [any[], Function] = useState<any[]>([]);
+    const [error, setError] = useState<String>("");
 
     useEffect(() => {
-        fetch("/api/v1/cards.php", { method: "GET" }).then(res => res.json()).then(data => {
-            setCards(data);
-            console.log(data)
-        });
+        fetch("/api/v1/cards.php", { method: "GET" })
+            .then(res => {
+                if (res.status === 200) {
+                    return Promise.all(["ok", res.json()]);
+                }
+                else {
+                    return Promise.all(["error", res.text()])
+                }
+            }).then((data: any) => {
+                console.log(data)
+                if (data[0] === "ok") {
+                    setCards(data[1]);
+                    return;
+                }
+                if (data[0] === "error") {
+                    setError(data[1])
+                    return;
+                }
+            }).catch(err => {
+                console.error(err)
+            });
     }, [])
 
     return (
         <div className="card-container">
-            {cards.map((value, index) => {
+            {error !== "" &&
+                <p id="cards-error-message">{error}</p>
+            }
+            {cards && cards.map((value, index) => {
                 return <Card key={index} card={value} />
             })
             }

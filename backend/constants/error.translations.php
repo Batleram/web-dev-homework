@@ -34,6 +34,13 @@ $errors = array(
     "USER_ALREADY_TAKEN" => array(
         "FRENCH" => "Le nom d'utilisateur est déjà utilisé"
     ),
+    "INVALID_SESSION" => array(
+        "FRENCH" => "La session est invalide, veuillez vous connecter"
+    ),
+    "MISSING_PERMISSION" => array(
+        "FRENCH" => "Vous n'avez pas la permission d'effectuer cette action"
+    )
+
 );
 
 define("errors", $errors);

@@ -24,3 +24,12 @@ function getUserFromName($username)
     $statement->execute();
     return $statement->fetchAll();
 }
+
+function getUserPermissions($username)
+{
+    $db_connection = new PDO(DB_DSN, DB_USER, DB_PASS);
+    $statement  = $db_connection->prepare("call get_user_permissions(:username);");
+    $statement->bindParam(':username', $username, PDO::PARAM_STR);
+    $statement->execute();
+    return $statement->fetchAll();
+}
