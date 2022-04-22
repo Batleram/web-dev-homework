@@ -2,6 +2,7 @@ import React, { useContext } from "react"
 import "../styles/Navbar.component.css"
 import { Link } from "react-router-dom"
 import { UserContext } from "../hooks"
+import { StyleSwitcher } from "."
 
 export const Navbar = () => {
     const { user, setUser } = useContext(UserContext);
@@ -10,6 +11,9 @@ export const Navbar = () => {
             <Link to="/" className="navigation-link">
                 <h3>Acceuil</h3>
             </Link>
+            <span className="navigation-link">
+                <StyleSwitcher/>
+            </span>
             {user?.isLoggedIn &&
                 <Link to="/cards" className="navigation-link">
                     <h3>Cartes</h3>

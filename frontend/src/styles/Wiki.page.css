@@ -2,7 +2,7 @@
     margin: 10px auto;
     width: 75%;
     padding: 10px;
-    border: 1px solid black ;
+    border: 1px solid var(--font1);
 }
 .wiki-section{
     margin: auto;
@@ -17,7 +17,7 @@
 
 .wiki-section h1::after{
     content:"";
-    background-color: black;
+    background-color: var(--font1);
     height: 1px;
     width: 90%;
     display: block;
