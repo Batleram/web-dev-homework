@@ -19,6 +19,9 @@ $errors = array(
     "PASSWORD_CONFIRM_DIFFERENT" => array(
         "FRENCH" => "Les mots de passe ne sont pas identiques"
     ),
+    "SHORT_PASSWORD" =>array(
+        "FRENCH" => "Le mot de passe doit avoir une longeur de 8 ou plus"
+    ),
     "INVALID_USER_CONTENTS" => array(
         "FRENCH" => "Le nom d'utilisteur doit commencer avec une lettre et ne peux pas utiliser de caractères spéciaux!"
     ),
