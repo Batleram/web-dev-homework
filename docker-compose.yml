@@ -5,6 +5,9 @@ services:
         build:
           context: ./frontend
           dockerfile: Dockerfile
+        environment:
+          - GENERATE_SOURCEMAP=false
+          - DISABLE_ESLINT_PLUGIN=true
         container_name: wd-node-frontend-builder
         volumes:
           - ./public:/srv/build
