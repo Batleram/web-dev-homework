@@ -4,6 +4,7 @@ services:
     wd-node-frontend-builder:
         build:
           context: ./frontend
+          dockerfile: Dockerfile
         container_name: wd-node-frontend-builder
         volumes:
           - ./public:/srv/build
@@ -20,17 +21,6 @@ services:
       volumes:
           - ./backend:/usr/share/nginx/html
 
-    # wd-php-backend:
-    #     container_name: wd-php-parser
-    #     restart: unless-stopped
-    #     image: php:7-fpm
-    #     environment:
-    #       - DBHOST=wd-database
-    #       - DB=wd
-    #       - DBUSER=${DBUSER}
-    #       - DBPASS=${DBPASS}
-    #     volumes:
-    #         - ./backend:/usr/share/nginx/html
     wd-webserver:
         container_name: wd-nginx
         restart: unless-stopped
