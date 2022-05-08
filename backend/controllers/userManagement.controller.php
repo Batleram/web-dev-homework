@@ -22,11 +22,6 @@ function loginPost()
         return;
     }
 
-    if(strlen($json_body["password"]) < 8){
-        decode_error("SHORT_PASSWORD");
-        return;
-    }
-
     $validated_username = validateUserName($json_body["username"]);
     // if there was an error in the validation
     if ($validated_username[1] != null) {
@@ -81,6 +76,13 @@ function signupPost()
         decode_error("PASSWORD_CONFIRM_DIFFERENT");
         return;
     }
+
+    // force minimum password length on signup
+    if(strlen($json_body["password"]) < 8){
+        decode_error("SHORT_PASSWORD");
+        return;
+    }
+
 
     $validated_username = validateUserName($json_body["username"]);
     // if there was an error in the validation
