@@ -6,6 +6,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
         cardsGet();
         break;
+    case 'POST':
+        cardsPost();
+        break;
+    case 'PATCH':
+        cardsPatch();
+        break;
     default:
         echo "unimplemented";
         break;

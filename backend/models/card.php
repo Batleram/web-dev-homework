@@ -1,4 +1,37 @@
 <?php
+include_once "../root-dir.php";
+include_once ROOT . "/constants/card.constants.php";
+
+function generateCard($name)
+{
+    // generate the base card
+    $card = array(
+        "name" =>$name,
+        "attribute_points"=> rand(0,5),
+        "stats" => array(),
+        "points"=>array()
+    );
+
+    // generate the stats
+    $rand_keys = array_rand(POSSIBLE_CARD_STATS, rand(2,count(POSSIBLE_CARD_STATS)));
+    foreach($rand_keys as $key){
+        array_push($card["stats"], array(
+            "stat" => POSSIBLE_CARD_STATS[$key],
+            "value" => rand(0,100)
+        ));
+    }
+
+    // generate the points
+    for($i=0;$i<rand(3,10); $i++){
+        array_push($card["points"], array(
+            "point_x" => rand(-20, 20),
+            "point_y" => rand(-20, 20),
+        ));
+    }
+
+
+    return $card;
+}
 
 function formatCardFromSql($raw_data)
 {

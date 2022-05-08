@@ -48,3 +48,17 @@ function getUserPermissions($username)
     $statement->execute();
     return $statement->fetchAll();
 }
+
+function doesUserHavePermission($username, $permission)
+{
+    $permissions = getUserPermissions($username);
+
+    foreach($permissions as $p){
+        if($p["permission"] == $permission){
+            return true;
+        }
+    }
+
+    return false;
+
+}
