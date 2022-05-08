@@ -20,6 +20,39 @@ CREATE TABLE `user_permissions` (
     FOREIGN KEY (`permissionid`) REFERENCES `permissions`(`permissionid`)
 );
 
+CREATE TABLE `cards`(
+    `cardid` INT NOT NULL AUTO_INCREMENT,
+    `userid` INT NOT NULL,
+    `attribute_points` INT NOT NULL,
+    `deleted` BOOLEAN  not null default 0,
+    KEY `card_id_index` (`cardid`) USING BTREE,
+    PRIMARY KEY (`cardid`),
+    FOREIGN KEY (`userid`) REFERENCES `users`(`userid`)
+);
+
+CREATE TABLE `card_stats`(
+    `cardid` INT NOT NULL,
+    `stat` VARCHAR(255) NOT NULL,
+    `value` INT NOT NULL,
+    FOREIGN KEY (`cardid`) REFERENCES `cards`(`cardid`)
+);
+
+CREATE TABLE `card_attributes`(
+    `cardid` INT NOT NULL,
+    `attribute` VARCHAR(255) NOT NULL,
+    `value` INT NOT NULL,
+    FOREIGN KEY (`cardid`) REFERENCES `cards`(`cardid`)
+);
+
+CREATE TABLE `card_logs` (
+    `userid` INT NOT NULL,
+    `cardid` INT NOT NULL,
+    `action` VARCHAR(255) not null,
+    `time` datetime not null,
+    FOREIGN KEY (`cardid`) REFERENCES `cards`(`cardid`),
+    FOREIGN KEY (`userid`) REFERENCES `users`(`userid`)
+);
+
 
 delimiter //
 create  procedure get_user_permissions(p_username varchar(255))
@@ -39,3 +72,6 @@ delimiter ;
 
 
 INSERT INTO `permissions` VALUES (null, "READ_CARD");
+INSERT INTO `permissions` VALUES (null, "CREATE_CARD");
+INSERT INTO `permissions` VALUES (null, "MODIFY_CARD");
+INSERT INTO `permissions` VALUES (null, "DELETE_CARD");
