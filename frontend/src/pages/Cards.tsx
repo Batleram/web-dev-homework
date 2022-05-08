@@ -4,8 +4,12 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import "../styles/Cards.page.css"
 import { BackSide } from 'three'
 
+type WierdPhpCardFormat = {
+    [key: string]: Card
+}
+
 export const Cards = () => {
-    const [cards, setCards]: [any[], Function] = useState<any[]>([]);
+    const [cards, setCards]: [WierdPhpCardFormat, Function] = useState<WierdPhpCardFormat>({});
     const [error, setError] = useState<String>("");
 
     useEffect(() => {
@@ -39,8 +43,8 @@ export const Cards = () => {
             }
             <div className="card-container">
                 {
-                    cards && cards.map((value, index) => {
-                        return <Card key={index} card={value} />
+                    cards && Object.keys(cards).map((value, index) => {
+                        return <Card key={index} card={cards[value]} />
                 })
             }
             </div>
@@ -48,7 +52,7 @@ export const Cards = () => {
     )
 }
 
-const Card = (props: { card: { positions: [number, number][] } }) => {
+const Card = (props: { card: Card }) => {
     const stats = ["Attaque: ", "Defense: ", "Intelligence: "]
     const camera = new THREE.PerspectiveCamera(
         45,
@@ -59,24 +63,39 @@ const Card = (props: { card: { positions: [number, number][] } }) => {
     camera.position.set(0, 0, 100);
     camera.lookAt(0, 0, 0);
 
+    const parsePoints = () =>{
+        let points:[number, number][] = []
+        props.card.points.map((value) =>{
+            points.push([
+                parseInt(value.x,10),
+                parseInt(value.y,10),
+            ])
+        })
+        return points.length === 0 ? [[0,0] as [number,number]]:points; // this is to prevent a page crash if, for some reason, a car has no points
+    }
+
     return (
         <div className="card">
-            <h1>Nom Carte</h1>
+            <h1>{[props.card.name]}</h1>
             <div className="card-image">
                 <Canvas camera={camera} >
                     <color attach="background" args={["black"]} />
                     <directionalLight position={[0, 5.0, 5.1]} castShadow={true} />
-                    <Shape position={[0, 0, 0]} vertices={props.card.positions} />
+                    <Shape position={[0, 0, 0]} vertices={parsePoints()} />
                 </Canvas>
             </div>
             <b>Description</b>
             <p className="card-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur cumque voluptatum aliquid totam fugiat nulla rem quam, quo, mollitia earum eius iusto fuga. Quo cupiditate odio at quam, beatae fugiat.</p>
 
             <b>Infos</b>
-            <ul>
-                {stats.map((val, id) => (
+            <ul className="card-info">
+                {props.card.stats.map((val, id) => (
 
-                    <li key={id}>{val}</li>
+                    <li className="card-stat" key={id}>{val.name}: {val.value}</li>
+                ))}
+                {props.card.attributes.map((val, id) => (
+
+                    <li className="card-attribute" key={id}>{val.name}: {val.value}</li>
                 ))}
             </ul>
         </div >
