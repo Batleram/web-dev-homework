@@ -73,6 +73,9 @@ $errors = array(
     "NO_ATTRIBUTE_POINTS" => array(
         "FRENCH" => "Vous n'avez plus de points d'attribut"
     ),
+    "WTF" => array(
+        "FRENCH" => "WTF???"
+    ),
 
 );
 

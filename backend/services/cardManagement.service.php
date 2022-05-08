@@ -70,7 +70,8 @@ function getUserCards($username)
     return $statement->fetchAll();
 }
 
-function getUserCard($username, $cardid){
+function getUserCard($username, $cardid)
+{
     $request_query = "
         select 
             cards.cardid, 
@@ -146,7 +147,8 @@ function getUserCard($username, $cardid){
     return $statement->fetchAll();
 }
 
-function addAttribute($cardid, $attribute, $value){
+function addAttribute($cardid, $attribute, $value)
+{
     // add attribute
     $db_connection = new PDO(DB_DSN, DB_USER, DB_PASS);
     $statement  = $db_connection->prepare("INSERT INTO card_attributes values (:cardid,:attribute,:value);");
@@ -159,14 +161,46 @@ function addAttribute($cardid, $attribute, $value){
     $statement  = $db_connection->prepare("UPDATE cards SET attribute_points = attribute_points-1 WHERE cardid = :cardid and attribute_points > 0;");
     $statement->bindParam(':cardid', $cardid, PDO::PARAM_INT);
     $statement->execute();
-
 }
 
-function addStat($cardid, $stat, $value){
+function addStat($cardid, $stat, $value)
+{
     $db_connection = new PDO(DB_DSN, DB_USER, DB_PASS);
     $statement  = $db_connection->prepare("INSERT INTO card_stats values (:cardid,:stat,:value);");
     $statement->bindParam(':cardid', $cardid, PDO::PARAM_INT);
     $statement->bindParam(':stat', $stat, PDO::PARAM_STR);
     $statement->bindParam(':value', $value, PDO::PARAM_INT);
     $statement->execute();
+}
+
+function writeCardToDatabase($card)
+{
+    $db_connection = new PDO(DB_DSN, DB_USER, DB_PASS);
+    $statement = $db_connection->prepare("INSERT INTO cards values (null, :cardname,:userid, :attribute_points, 0);");
+    $statement->bindParam(':cardname', $card["name"], PDO::PARAM_STR);
+    $statement->bindParam(':userid', $card["userid"], PDO::PARAM_INT);
+    $statement->bindParam(':attribute_points', $card["attribute_points"], PDO::PARAM_INT);
+    $statement->execute();
+
+    // do something to get card id
+    $statement = $db_connection->prepare("SELECT cardid from cards order by cardid desc limit 1;");
+    $statement->execute();
+    $cardid = $statement->fetch()["cardid"];
+
+    foreach ($card["points"] as $index=>$point) {
+        $statement = $db_connection->prepare("INSERT INTO card_points values (:cardid, :point_order, :point_x, :point_y);");
+        $statement->bindParam(':cardid', $cardid, PDO::PARAM_INT);
+        $statement->bindParam(':point_order', $index, PDO::PARAM_INT);
+        $statement->bindParam(':point_x', $point["point_x"], PDO::PARAM_INT);
+        $statement->bindParam(':point_y', $point["point_y"], PDO::PARAM_INT);
+        $statement->execute();
+    }
+
+    foreach ($card["stats"] as $stat) {
+        $statement = $db_connection->prepare("INSERT INTO card_stats values (:cardid, :stat, :value);");
+        $statement->bindParam(':cardid', $cardid, PDO::PARAM_INT);
+        $statement->bindParam(':stat', $stat["stat"], PDO::PARAM_STR);
+        $statement->bindParam(':value', $stat["value"], PDO::PARAM_INT);
+        $statement->execute();
+    }
 }

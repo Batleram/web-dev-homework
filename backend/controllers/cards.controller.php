@@ -58,6 +58,18 @@ function cardsPost() // to generate a new card
 
     $card = generateCard($validated_cardname);
 
+    $user = getUserFromName($_SESSION["username"]);
+
+    if (!isset($user[0])) {
+        decode_error("WTF");
+        return;
+    }
+
+    $card["userid"] = $user[0]["userid"];
+
+    /* // write the card to the database */
+    writeCardToDatabase($card);
+
     header("Content-Type: application/json");
     echo json_encode($card);
 }
@@ -109,7 +121,7 @@ function cardsPatch() // to add an attribute
     }
 
     // check that the card has attribute slots left
-    if($card_for_attribute[array_keys($card_for_attribute)[0]]["attribute_points"] <= 0 ){
+    if ($card_for_attribute[array_keys($card_for_attribute)[0]]["attribute_points"] <= 0) {
         decode_error("NO_ATTRIBUTE_POINTS");
         return;
     }
