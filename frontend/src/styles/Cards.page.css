@@ -60,3 +60,30 @@
     text-align: center;
     color:var(--color1);
 }
+
+.card-actions{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    margin-left: auto;
+    width: 20vw;
+    justify-content:space-evenly;
+}
+
+.card-action{
+    cursor: pointer;
+    display: flex;
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+    text-align: center;
+    align-content: center;
+    background-color: var(--color4);
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+}
+
+.card-action:hover{
+    filter: brightness(0.9);
+}

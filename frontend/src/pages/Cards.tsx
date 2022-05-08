@@ -11,8 +11,9 @@ type WierdPhpCardFormat = {
 export const Cards = () => {
     const [cards, setCards]: [WierdPhpCardFormat, Function] = useState<WierdPhpCardFormat>({});
     const [error, setError] = useState<String>("");
+    const [showNameModal, setShowNameModal]: [boolean, Function] = useState<boolean>(false);
 
-    useEffect(() => {
+    const getCards = () => {
         fetch("/api/v1/cards.php", { method: "GET" })
             .then(res => {
                 if (res.status === 200) {
@@ -22,7 +23,6 @@ export const Cards = () => {
                     return Promise.all(["error", res.text()])
                 }
             }).then((data: any) => {
-                console.log(data)
                 if (data[0] === "ok") {
                     setCards(data[1]);
                     return;
@@ -34,19 +34,97 @@ export const Cards = () => {
             }).catch(err => {
                 console.error(err)
             });
+    }
+
+    useEffect(() => {
+        getCards()
     }, [])
+
+    const handleTradeClick = () => {
+
+    }
+
+    const handleGenCardClick = () => {
+        setShowNameModal(true);
+    }
+
+    const closeNameModal = () => {
+        getCards();
+        setShowNameModal(false);
+    }
 
     return (
         <>
+            {showNameModal && <NameModal closeModal={closeNameModal} />}
             {error !== "" &&
                 <p id="cards-error-message">{error}</p>
             }
-            <div className="card-container">
-                {
-                    cards && Object.keys(cards).map((value, index) => {
-                        return <Card key={index} card={cards[value]} />
-                })
+            {error === "" &&
+                <>
+
+                    <div className="card-actions">
+                        <button className="card-action" onClick={handleTradeClick}>↻</button>
+                        <button className="card-action" onClick={handleGenCardClick}>+</button>
+                    </div>
+                    <div className="card-container">
+                        {cards &&
+                            Object.keys(cards).map((value, index) => {
+                                return <Card key={index} card={cards[value]} />
+                            })
+                        }
+                    </div>
+                </>
             }
+        </>
+    )
+}
+
+const NameModal = (props: { closeModal: Function }) => {
+    const [error, setError]: [string, Function] = useState<string>("");
+
+    const handleModalSubmit = () => {
+        let inputElement = document.getElementById("modal-name-input") as HTMLInputElement;
+        let inputText = inputElement.value;
+
+        fetch("/api/v1/cards.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                card_name: inputText
+            })
+
+        }).then(res => {
+            if (res.status === 200) {
+                return Promise.all(["ok", res.json()]);
+            }
+            else {
+                return Promise.all(["error", res.text()])
+            }
+        }).then((data: any) => {
+            if (data[0] === "ok") {
+                props.closeModal();
+                return;
+            }
+            if (data[0] === "error") {
+                setError(data[1])
+                return;
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
+    return (
+        <>
+            <div id="ui-blocker"></div>
+            <div className="modal">
+                <input id="modal-name-input"></input>
+                <button onClick={handleModalSubmit}>Gen Card</button>
+                {error !== "" &&
+                    <p id="modal-error-message">{error}</p>
+                }
             </div>
         </>
     )
@@ -63,15 +141,15 @@ const Card = (props: { card: Card }) => {
     camera.position.set(0, 0, 100);
     camera.lookAt(0, 0, 0);
 
-    const parsePoints = () =>{
-        let points:[number, number][] = []
-        props.card.points.map((value) =>{
+    const parsePoints = () => {
+        let points: [number, number][] = []
+        props.card.points.map((value) => {
             points.push([
-                parseInt(value.x,10),
-                parseInt(value.y,10),
+                parseInt(value.x, 10),
+                parseInt(value.y, 10),
             ])
         })
-        return points.length === 0 ? [[0,0] as [number,number]]:points; // this is to prevent a page crash if, for some reason, a car has no points
+        return points.length === 0 ? [[0, 0] as [number, number]] : points; // this is to prevent a page crash if, for some reason, a car has no points
     }
 
     return (
