@@ -22,6 +22,7 @@ CREATE TABLE `user_permissions` (
 
 CREATE TABLE `cards`(
     `cardid` INT NOT NULL AUTO_INCREMENT,
+    `card_name` VARCHAR(255) NOT NULL,
     `userid` INT NOT NULL,
     `attribute_points` INT NOT NULL,
     `deleted` BOOLEAN  not null default 0,
@@ -53,6 +54,13 @@ CREATE TABLE `card_logs` (
     FOREIGN KEY (`userid`) REFERENCES `users`(`userid`)
 );
 
+CREATE TABLE `card_points`(
+    `cardid` INT NOT NULL,
+    `point_order` INT NOT NULL,
+    `point_x` INT NOT NULL,
+    `point_y` INT NOT NULL,
+    FOREIGN KEY (`cardid`) REFERENCES `cards`(`cardid`)
+);
 
 delimiter //
 create  procedure get_user_permissions(p_username varchar(255))
