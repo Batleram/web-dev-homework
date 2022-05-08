@@ -126,5 +126,5 @@ function cardsPatch() // to add an attribute
         return;
     }
 
-    addAttribute(array_keys($card_for_attribute)[0], $json_body["attribute_name"], $json_body["attribute_value"]);
+    addAttribute($card_for_attribute[array_keys($card_for_attribute)[0]], $json_body["attribute_name"], $json_body["attribute_value"]);
 }

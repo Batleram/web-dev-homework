@@ -43,7 +43,9 @@ function formatCardFromSql($raw_data)
         // add the card to the array if it doesn't exist
         if (!isset($card_data_parsed[$card_stat["cardid"]])) {
             $card_data_parsed[$card_stat["cardid"]] = array(
+                "cardid" => $card_stat["cardid"],
                 "name" => $card_stat["card_name"],
+                "userid" => $card_stat["userid"],
                 "attribute_points" => $card_stat["attribute_points"],
                 "attributes" => array(),
                 "stats" => array(),
