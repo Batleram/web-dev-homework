@@ -34,6 +34,6 @@ export const StyleSwitcher = (props: {}) => {
 
     }, [isLight])
     return (
-        <h3 onClick={()=>setIsLight(!isLight)}>{isLight ? "Theme sombre" : "Theme clair"}</h3>
+        <h3 onClick={()=>setIsLight(!isLight)}>{isLight ? "🌑" : "☀️"}</h3>
     )
 }

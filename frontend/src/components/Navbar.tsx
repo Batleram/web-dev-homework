@@ -9,7 +9,7 @@ export const Navbar = () => {
     return (
         <nav id="navigation-bar">
             <Link to="/" className="navigation-link">
-                <h3>Acceuil</h3>
+                <h3>Accueil</h3>
             </Link>
             <span className="navigation-link">
                 <StyleSwitcher/>
