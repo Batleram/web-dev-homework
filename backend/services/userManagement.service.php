@@ -14,6 +14,21 @@ function addUser($username, $password_hash)
     $statement  = $db_connection->prepare("call add_user_permission(:username, \"READ_CARD\");");
     $statement->bindParam(':username', $username, PDO::PARAM_STR);
     $statement->execute();
+
+    // set basic create permission to new user
+    $statement  = $db_connection->prepare("call add_user_permission(:username, \"CREATE_CARD\");");
+    $statement->bindParam(':username', $username, PDO::PARAM_STR);
+    $statement->execute();
+
+    // set basic modify permission to new user
+    $statement  = $db_connection->prepare("call add_user_permission(:username, \"MODIFY_CARD\");");
+    $statement->bindParam(':username', $username, PDO::PARAM_STR);
+    $statement->execute();
+
+    // set basic delete permission to new user
+    $statement  = $db_connection->prepare("call add_user_permission(:username, \"DELETE_CARD\");");
+    $statement->bindParam(':username', $username, PDO::PARAM_STR);
+    $statement->execute();
 }
 
 function getUserFromName($username)
