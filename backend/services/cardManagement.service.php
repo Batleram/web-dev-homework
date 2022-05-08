@@ -239,3 +239,18 @@ function deleteCard($card)
     $statement->bindParam(':cardid', $card["cardid"], PDO::PARAM_INT);
     $statement->execute();
 }
+
+function tradeCard($card){
+
+    $db_connection = new PDO(DB_DSN, DB_USER, DB_PASS);
+    $statement = $db_connection->prepare("UPDATE cards SET deleted=1 WHERE cardid=:cardid;");
+    $statement->bindParam(':cardid', $card["cardid"], PDO::PARAM_STR);
+    $statement->execute();
+
+
+    // log creation of card
+    $statement = $db_connection->prepare("INSERT INTO card_logs VALUES (:userid, :cardid, \"TRADE\", now());");
+    $statement->bindParam(':userid', $card["userid"], PDO::PARAM_INT);
+    $statement->bindParam(':cardid', $card["cardid"], PDO::PARAM_INT);
+    $statement->execute();
+}
