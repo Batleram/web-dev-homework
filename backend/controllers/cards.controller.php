@@ -128,3 +128,36 @@ function cardsPatch() // to add an attribute
 
     addAttribute($card_for_attribute[array_keys($card_for_attribute)[0]], $json_body["attribute_name"], $json_body["attribute_value"]);
 }
+
+function cardsDelete() // delete a card
+{
+    $json_body = json_decode(file_get_contents("php://input"), true);
+
+    // check user is signed in
+    if (!validateSession()) {
+        decode_error("INVALID_SESSION");
+        return;
+    }
+
+    // check user permission
+    if (!doesUserHavePermission($_SESSION["username"], "DELETE_CARD")) {
+        decode_error("MISSING_PERMISSION");
+        return;
+    }
+    
+    // check a cardid was supplied
+    if (!isset($json_body["cardid"])) {
+        decode_error("CARDID_MISSING");
+        return;
+    }
+
+    $user_cards = formatCardFromSql(getUserCards($_SESSION["username"]));
+    // check if the user owns the card
+    if(!isset($user_cards[$json_body["cardid"]])){
+        decode_error("UNOWNED_CARD");
+        return;
+    }
+
+    deleteCard($user_cards[$json_body["cardid"]]);
+    
+}

@@ -12,6 +12,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'PATCH':
         cardsPatch();
         break;
+    case 'DELETE':
+        cardsDelete();
+        break;
     default:
         echo "unimplemented";
         break;
