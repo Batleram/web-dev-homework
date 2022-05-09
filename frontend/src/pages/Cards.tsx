@@ -12,6 +12,8 @@ export const Cards = () => {
     const [cards, setCards]: [WierdPhpCardFormat, Function] = useState<WierdPhpCardFormat>({});
     const [error, setError] = useState<String>("");
     const [showNameModal, setShowNameModal]: [boolean, Function] = useState<boolean>(false);
+    const [showTradeModal, setShowTradeModal]: [boolean, Function] = useState<boolean>(false);
+    const [currentlySelectedCard, setCurrentlySelectedCard]: [Card, Function] = useState<Card>({} as Card);
 
     const getCards = () => {
         fetch("/api/v1/cards.php", { method: "GET" })
@@ -40,10 +42,6 @@ export const Cards = () => {
         getCards()
     }, [])
 
-    const handleTradeClick = () => {
-
-    }
-
     const handleGenCardClick = () => {
         setShowNameModal(true);
     }
@@ -53,9 +51,18 @@ export const Cards = () => {
         setShowNameModal(false);
     }
 
+    const handleCardDeleteClick = (card: Card) => {
+        //
+    }
+    const handleCardTradeClick = (card: Card) => {
+        setShowTradeModal(true);
+        setCurrentlySelectedCard(card)
+    }
+
     return (
         <>
             {showNameModal && <NameModal closeModal={closeNameModal} />}
+            {showTradeModal && <TradeModal closeModal={handleCardDeleteClick} card={currentlySelectedCard}/>}
             {error !== "" &&
                 <p id="cards-error-message">{error}</p>
             }
@@ -63,13 +70,12 @@ export const Cards = () => {
                 <>
 
                     <div className="card-actions">
-                        <button className="card-action" onClick={handleTradeClick}>↻</button>
                         <button className="card-action" onClick={handleGenCardClick}>+</button>
                     </div>
                     <div className="card-container">
                         {cards &&
                             Object.keys(cards).map((value, index) => {
-                                return <Card key={index} card={cards[value]} />
+                                return <Card key={index} card={cards[value]} cardDelete={handleCardDeleteClick} cardTrade={handleCardTradeClick} showButtons={true} />
                             })
                         }
                     </div>
@@ -130,7 +136,29 @@ const NameModal = (props: { closeModal: Function }) => {
     )
 }
 
-const Card = (props: { card: Card }) => {
+const TradeModal = (props: { closeModal: Function, card: Card }) => {
+    const [error, setError]: [string, Function] = useState<string>("");
+    const handleModalSubmit = () => {
+
+    }
+
+    return (
+        <>
+            <div id="ui-blocker"></div>
+            <div className="modal">
+                <input id="modal-name-input"></input>
+                <button onClick={handleModalSubmit}>Trade card</button>
+                <Card card={props.card} showButtons={false} />
+                {error !== "" &&
+                    <p id="modal-error-message">{error}</p>
+                }
+            </div>
+        </>
+    )
+
+}
+
+const Card = (props: { card: Card, cardTrade?: Function, cardDelete?: Function, showButtons: boolean }) => {
     const stats = ["Attaque: ", "Defense: ", "Intelligence: "]
     const camera = new THREE.PerspectiveCamera(
         45,
@@ -152,9 +180,22 @@ const Card = (props: { card: Card }) => {
         return points.length === 0 ? [[0, 0] as [number, number]] : points; // this is to prevent a page crash if, for some reason, a car has no points
     }
 
+    const handleTradeButtonClick = () => {
+        props.cardTrade ? props.cardTrade(props.card) : console.error("Card missing property cardTrade()");
+    }
+
+    const handleDeleteButtonClick = () => {
+        props.cardDelete ? props.cardDelete(props.card) : console.error("Card missing property cardDelete()");
+    }
+
     return (
         <div className="card">
             <h1>{[props.card.name]}</h1>
+            {props.showButtons &&
+                <>
+                    <button onClick={handleTradeButtonClick}>trade</button>
+                </>
+            }
             <div className="card-image">
                 <Canvas camera={camera} >
                     <color attach="background" args={["black"]} />
@@ -190,14 +231,6 @@ const Shape = (props: { position: [number, number, number], vertices: [number, n
 
     positions.slice(1).forEach(function(pos: [number, number]) {
         shape.lineTo(pos[0], pos[1])
-        // shape.bezierCurveTo(
-        //     x + pos[0],
-        //     y,
-        //     x,
-        //     y + pos[1],
-        //     x + pos[0],
-        //     y + pos[1]
-        // );
     });
 
     let color = getRndInteger(0, 16777215);
