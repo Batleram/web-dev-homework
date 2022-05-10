@@ -87,3 +87,30 @@
 .card-action:hover{
     filter: brightness(0.9);
 }
+
+.modal{
+    position: fixed;
+    width: 30vw;
+    height: min-content;
+    padding: 30px;
+    border-radius: 30px;
+    box-shadow: black 1px 1px 5px;
+    background-color: white;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    /* margin-top: -10vh; */
+    /* margin-left: -15vw; */
+    z-index: 101;
+}
+
+.ui-blocker{
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    filter: blur(2px);
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    z-index:100;
+}

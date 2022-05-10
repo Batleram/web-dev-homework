@@ -13,6 +13,7 @@ export const Cards = () => {
     const [error, setError] = useState<String>("");
     const [showNameModal, setShowNameModal]: [boolean, Function] = useState<boolean>(false);
     const [showTradeModal, setShowTradeModal]: [boolean, Function] = useState<boolean>(false);
+    const [showDeleteModal, setShowDeleteModal]: [boolean, Function] = useState<boolean>(false);
     const [currentlySelectedCard, setCurrentlySelectedCard]: [Card, Function] = useState<Card>({} as Card);
 
     const getCards = () => {
@@ -51,8 +52,19 @@ export const Cards = () => {
         setShowNameModal(false);
     }
 
+    const closeTradeModal = () => {
+        getCards();
+        setShowTradeModal(false);
+    }
+
+    const closeDeleteModal = () => {
+        getCards();
+        setShowDeleteModal(false);
+    }
+
     const handleCardDeleteClick = (card: Card) => {
-        //
+        setShowDeleteModal(true)
+        setCurrentlySelectedCard(card)
     }
     const handleCardTradeClick = (card: Card) => {
         setShowTradeModal(true);
@@ -62,7 +74,8 @@ export const Cards = () => {
     return (
         <>
             {showNameModal && <NameModal closeModal={closeNameModal} />}
-            {showTradeModal && <TradeModal closeModal={handleCardDeleteClick} card={currentlySelectedCard}/>}
+            {showTradeModal && <TradeModal closeModal={closeTradeModal} card={currentlySelectedCard} />}
+            {showDeleteModal && <DeleteConfirmModal closeModal={closeDeleteModal} card={currentlySelectedCard} />}
             {error !== "" &&
                 <p id="cards-error-message">{error}</p>
             }
@@ -124,10 +137,61 @@ const NameModal = (props: { closeModal: Function }) => {
 
     return (
         <>
-            <div id="ui-blocker"></div>
+            <div className="ui-blocker"></div>
             <div className="modal">
                 <input id="modal-name-input"></input>
                 <button onClick={handleModalSubmit}>Gen Card</button>
+                <button onClick={() => props.closeModal()}>Close</button>
+                {error !== "" &&
+                    <p id="modal-error-message">{error}</p>
+                }
+            </div>
+        </>
+    )
+}
+
+
+const DeleteConfirmModal = (props: { closeModal: Function, card: Card }) => {
+    const [error, setError]: [string, Function] = useState<string>("");
+
+    const handleModalSubmit = () => {
+        fetch("/api/v1/cards.php", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                cardid: props.card.cardid,
+            })
+
+        }).then(res => {
+            if (res.status === 200) {
+                return Promise.all(["ok", res.json()]);
+            }
+            else {
+                return Promise.all(["error", res.text()])
+            }
+        }).then((data: any) => {
+            if (data[0] === "ok") {
+                props.closeModal();
+                return;
+            }
+            if (data[0] === "error") {
+                setError(data[1])
+                return;
+            }
+        }).catch(err => {
+            console.error(err)
+        });
+        props.closeModal()
+    }
+
+    return (
+        <>
+            <div className="ui-blocker"></div>
+            <div className="modal">
+                <button onClick={handleModalSubmit}>Confirm</button>
+                <button onClick={() => props.closeModal()}>Close</button>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
                 }
@@ -139,16 +203,44 @@ const NameModal = (props: { closeModal: Function }) => {
 const TradeModal = (props: { closeModal: Function, card: Card }) => {
     const [error, setError]: [string, Function] = useState<string>("");
     const handleModalSubmit = () => {
+        fetch("/api/v1/trade.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                card_name: props.card.name,
+                cardid: props.card.cardid
+            })
 
+        }).then(res => {
+            if (res.status === 200) {
+                return Promise.all(["ok", res.json()]);
+            }
+            else {
+                return Promise.all(["error", res.text()])
+            }
+        }).then((data: any) => {
+            if (data[0] === "ok") {
+                props.closeModal();
+                return;
+            }
+            if (data[0] === "error") {
+                setError(data[1])
+                return;
+            }
+        }).catch(err => {
+            console.error(err)
+        });
     }
 
     return (
         <>
-            <div id="ui-blocker"></div>
+            <div className="ui-blocker"></div>
             <div className="modal">
-                <input id="modal-name-input"></input>
-                <button onClick={handleModalSubmit}>Trade card</button>
                 <Card card={props.card} showButtons={false} />
+                <button onClick={handleModalSubmit}>Trade card</button>
+                <button onClick={() => props.closeModal()}>Close</button>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
                 }
@@ -194,6 +286,7 @@ const Card = (props: { card: Card, cardTrade?: Function, cardDelete?: Function, 
             {props.showButtons &&
                 <>
                     <button onClick={handleTradeButtonClick}>trade</button>
+                    <button onClick={handleDeleteButtonClick}>delete</button>
                 </>
             }
             <div className="card-image">
