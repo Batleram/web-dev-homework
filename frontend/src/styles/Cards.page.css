@@ -56,6 +56,10 @@
     color: var(--color5);
 }
 
+.card-remaining-attributes{
+    color: var(--color1);
+}
+
 #cards-error-message{
     text-align: center;
     color:var(--color1);

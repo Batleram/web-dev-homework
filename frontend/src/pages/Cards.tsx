@@ -14,6 +14,7 @@ export const Cards = () => {
     const [showNameModal, setShowNameModal]: [boolean, Function] = useState<boolean>(false);
     const [showTradeModal, setShowTradeModal]: [boolean, Function] = useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal]: [boolean, Function] = useState<boolean>(false);
+    const [showAddAtributeModal, setShowAddAttributeModal]: [boolean, Function] = useState<boolean>(false);
     const [currentlySelectedCard, setCurrentlySelectedCard]: [Card, Function] = useState<Card>({} as Card);
 
     const getCards = () => {
@@ -62,6 +63,11 @@ export const Cards = () => {
         setShowDeleteModal(false);
     }
 
+    const closeAddAttributeModal = () => {
+        getCards();
+        setShowAddAttributeModal(false);
+    }
+
     const handleCardDeleteClick = (card: Card) => {
         setShowDeleteModal(true)
         setCurrentlySelectedCard(card)
@@ -71,11 +77,19 @@ export const Cards = () => {
         setCurrentlySelectedCard(card)
     }
 
+    const handleCardAttributeClick = (card: Card) => {
+        if (parseInt(card.attribute_points,10) === 0)
+            return;
+        setShowAddAttributeModal(true);
+        setCurrentlySelectedCard(card)
+    }
+
     return (
         <>
             {showNameModal && <NameModal closeModal={closeNameModal} />}
             {showTradeModal && <TradeModal closeModal={closeTradeModal} card={currentlySelectedCard} />}
             {showDeleteModal && <DeleteConfirmModal closeModal={closeDeleteModal} card={currentlySelectedCard} />}
+            {showAddAtributeModal && <AddAttributeModal closeModal={closeAddAttributeModal} card={currentlySelectedCard} />}
             {error !== "" &&
                 <p id="cards-error-message">{error}</p>
             }
@@ -88,7 +102,7 @@ export const Cards = () => {
                     <div className="card-container">
                         {cards &&
                             Object.keys(cards).map((value, index) => {
-                                return <Card key={index} card={cards[value]} cardDelete={handleCardDeleteClick} cardTrade={handleCardTradeClick} showButtons={true} />
+                                return <Card key={index} card={cards[value]} cardDelete={handleCardDeleteClick} cardTrade={handleCardTradeClick} cardAttribute={handleCardAttributeClick} showButtons={true} />
                             })
                         }
                     </div>
@@ -116,20 +130,13 @@ const NameModal = (props: { closeModal: Function }) => {
 
         }).then(res => {
             if (res.status === 200) {
-                return Promise.all(["ok", res.json()]);
+                props.closeModal();
             }
             else {
-                return Promise.all(["error", res.text()])
+                return res.text()
             }
         }).then((data: any) => {
-            if (data[0] === "ok") {
-                props.closeModal();
-                return;
-            }
-            if (data[0] === "error") {
-                setError(data[1])
-                return;
-            }
+            setError(data)
         }).catch(err => {
             console.error(err)
         });
@@ -150,6 +157,84 @@ const NameModal = (props: { closeModal: Function }) => {
     )
 }
 
+const AddAttributeModal = (props: { closeModal: Function, card: Card }) => {
+    const [error, setError]: [string, Function] = useState<string>("");
+    const [possibleAttributes, setPossibleAttributes]: [string[], Function] = useState<string[]>([]);
+
+    useEffect(() => {
+        fetch("/api/v1/attributes.php", { method: "GET" })
+            .then(res => {
+                if (res.status === 200) {
+                    return Promise.all(["ok", res.json()]);
+                }
+                else {
+                    return Promise.all(["error", res.text()])
+                }
+            }).then((data: any) => {
+                if (data[0] === "ok") {
+                    setPossibleAttributes(data[1]);
+                    return;
+                }
+                if (data[0] === "error") {
+                    setError(data[1])
+                    return;
+                }
+            }).catch(err => {
+                console.error(err)
+            });
+    }, [])
+
+    const handleModalSubmit = () => {
+        const attributeElement = document.getElementById("attribute-type") as HTMLSelectElement;
+        let attributeType = attributeElement.value;
+        const attributeValueElement = document.getElementById("attribute-value") as HTMLInputElement;
+        let attributeValue = attributeValueElement.value;
+
+
+        fetch("/api/v1/cards.php", {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                cardid: parseInt(props.card.cardid,10),
+                attribute_value: parseInt(attributeValue,10),
+                attribute_name: attributeType
+            })
+
+        }).then(res => {
+            if (res.status === 200) {
+                props.closeModal();
+            }
+            else {
+                return res.text()
+            }
+        }).then((data: any) => {
+            setError(data)
+        }).catch(err => {
+            console.error(err)
+        });
+    }
+
+    return (
+        <>
+            <div className="ui-blocker"></div>
+            <div className="modal">
+                <select id="attribute-type">
+                    {possibleAttributes.map((val, id) => (
+                        <option value={val} key={id}>{val}</option>
+                    ))}
+                </select>
+                <input id="attribute-value" type="number" min="1" max="5" placeholder="Value"/>
+                <button onClick={handleModalSubmit}>Save Attribute</button>
+                <button onClick={() => props.closeModal()}>Close</button>
+                {error !== "" &&
+                    <p id="modal-error-message">{error}</p>
+                }
+            </div>
+        </>
+    )
+}
 
 const DeleteConfirmModal = (props: { closeModal: Function, card: Card }) => {
     const [error, setError]: [string, Function] = useState<string>("");
@@ -166,24 +251,16 @@ const DeleteConfirmModal = (props: { closeModal: Function, card: Card }) => {
 
         }).then(res => {
             if (res.status === 200) {
-                return Promise.all(["ok", res.json()]);
+                props.closeModal();
             }
             else {
-                return Promise.all(["error", res.text()])
+                return res.text()
             }
         }).then((data: any) => {
-            if (data[0] === "ok") {
-                props.closeModal();
-                return;
-            }
-            if (data[0] === "error") {
-                setError(data[1])
-                return;
-            }
+            setError(data)
         }).catch(err => {
             console.error(err)
         });
-        props.closeModal()
     }
 
     return (
@@ -215,20 +292,13 @@ const TradeModal = (props: { closeModal: Function, card: Card }) => {
 
         }).then(res => {
             if (res.status === 200) {
-                return Promise.all(["ok", res.json()]);
+                props.closeModal();
             }
             else {
-                return Promise.all(["error", res.text()])
+                return res.text();
             }
         }).then((data: any) => {
-            if (data[0] === "ok") {
-                props.closeModal();
-                return;
-            }
-            if (data[0] === "error") {
-                setError(data[1])
-                return;
-            }
+            setError(data)
         }).catch(err => {
             console.error(err)
         });
@@ -250,7 +320,7 @@ const TradeModal = (props: { closeModal: Function, card: Card }) => {
 
 }
 
-const Card = (props: { card: Card, cardTrade?: Function, cardDelete?: Function, showButtons: boolean }) => {
+const Card = (props: { card: Card, cardTrade?: Function, cardDelete?: Function, cardAttribute?: Function, showButtons: boolean }) => {
     const stats = ["Attaque: ", "Defense: ", "Intelligence: "]
     const camera = new THREE.PerspectiveCamera(
         45,
@@ -280,6 +350,10 @@ const Card = (props: { card: Card, cardTrade?: Function, cardDelete?: Function, 
         props.cardDelete ? props.cardDelete(props.card) : console.error("Card missing property cardDelete()");
     }
 
+    const handleAddAttributeClick = () => {
+        props.cardAttribute ? props.cardAttribute(props.card) : console.error("Card missing property cardDelete()");
+    }
+
     return (
         <div className="card">
             <h1>{[props.card.name]}</h1>
@@ -287,6 +361,7 @@ const Card = (props: { card: Card, cardTrade?: Function, cardDelete?: Function, 
                 <>
                     <button onClick={handleTradeButtonClick}>trade</button>
                     <button onClick={handleDeleteButtonClick}>delete</button>
+                    <button onClick={handleAddAttributeClick}>add attribute</button>
                 </>
             }
             <div className="card-image">
@@ -305,6 +380,7 @@ const Card = (props: { card: Card, cardTrade?: Function, cardDelete?: Function, 
 
                     <li className="card-stat" key={id}>{val.name}: {val.value}</li>
                 ))}
+                <p className="card-remaining-attributes">Attributs restants: {props.card.attribute_points}</p>
                 {props.card.attributes.map((val, id) => (
 
                     <li className="card-attribute" key={id}>{val.name}: {val.value}</li>
@@ -326,7 +402,7 @@ const Shape = (props: { position: [number, number, number], vertices: [number, n
         shape.lineTo(pos[0], pos[1])
     });
 
-    let color = getRndInteger(0, 16777215);
+    // let color = getRndInteger(0, 16777215);
 
     let rotationspeed = getRndFloat(-0.06, 0.06) / 10;
     useFrame((_state, _delta) => {
@@ -336,7 +412,7 @@ const Shape = (props: { position: [number, number, number], vertices: [number, n
     return (
         <mesh position={props.position} ref={mesh}>
             <shapeGeometry args={[shape]} />
-            <meshPhongMaterial color={color} />
+            <meshPhongMaterial color={16711680} />
         </mesh >
     )
 }

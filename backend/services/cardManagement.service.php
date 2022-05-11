@@ -164,8 +164,8 @@ function addAttribute($card, $attribute, $value)
     $statement->execute();
 
     // decrement remaining attribute slots
-    $statement  = $db_connection->prepare("UPDATE cards SET attribute_points = attribute_points-1 WHERE cardid = :cardid and attribute_points > 0;");
-    $statement->bindParam(':cardid', $cardid, PDO::PARAM_INT);
+    $statement  = $db_connection->prepare("UPDATE cards SET attribute_points = attribute_points -1 WHERE cardid = :cardid and attribute_points > 0;");
+    $statement->bindParam(':cardid', $card["cardid"], PDO::PARAM_INT);
     $statement->execute();
 
     // log card edit
