@@ -40,6 +40,15 @@ function getUserFromName($username)
     return $statement->fetchAll();
 }
 
+function getLastUserActions($username)
+{
+    $db_connection = new PDO(DB_DSN, DB_USER, DB_PASS);
+    $statement = $db_connection->prepare("select * from card_logs where userid=(select userid from users where username=:username) and time=(select time from card_logs as alt where alt.action=card_logs.action order by time desc limit 1);");
+    $statement->bindParam(':username', $username, PDO::PARAM_STR);
+    $statement->execute();
+    return $statement->fetchAll();
+}
+
 function getUserPermissions($username)
 {
     $db_connection = new PDO(DB_DSN, DB_USER, DB_PASS);
@@ -53,12 +62,11 @@ function doesUserHavePermission($username, $permission)
 {
     $permissions = getUserPermissions($username);
 
-    foreach($permissions as $p){
-        if($p["permission"] == $permission){
+    foreach ($permissions as $p) {
+        if ($p["permission"] == $permission) {
             return true;
         }
     }
 
     return false;
-
 }

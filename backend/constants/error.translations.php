@@ -73,6 +73,12 @@ $errors = array(
     "NO_ATTRIBUTE_POINTS" => array(
         "FRENCH" => "Vous n'avez plus de points d'attribut"
     ),
+    "ACTION_COOLDOWN" => array(
+        "FRENCH" => "Cette action est en train de rafraichir"
+    ),
+    "SHORT_MISSING_CARDNAME" => array(
+        "FRENCH" => "Le nom de carte dois avoir au moins 4 caractères"
+    ),
     "WTF" => array(
         "FRENCH" => "WTF???"
     ),

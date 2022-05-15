@@ -3,7 +3,7 @@ include_once "../root-dir.php";
 include_once ROOT . "/constants/config.php";
 include_once ROOT . "/constants/error.translations.php";
 
-function decode_error($error)
+function handle_error($error)
 {
     $json_body = json_decode(file_get_contents("php://input"), true);
     http_response_code(403);
