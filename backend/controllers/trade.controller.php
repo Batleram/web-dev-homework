@@ -16,6 +16,12 @@ function tradePost()
         return;
     }
 
+    // check csrf
+    if(!validateCSRFToken()){
+        handle_error("INVALID_CSRF_TOKEN");
+        return;
+    }
+
     // check for permission to read card
     if (!doesUserHavePermission($_SESSION["username"], "DELETE_CARD")) {
         handle_error("MISSING_PERMISSION");

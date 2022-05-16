@@ -3,6 +3,7 @@ include_once "../root-dir.php";
 include_once ROOT . "/services/userManagement.service.php";
 include_once ROOT . "/services/sessionManagement.service.php";
 include_once ROOT . "/services/cardManagement.service.php";
+include_once ROOT . "/services/csrftoken.service.php";
 include_once ROOT . "/helpers/error.handler.php";
 include_once ROOT . "/validations/cardName.validation.php";
 include_once ROOT . "/models/card.php";
@@ -33,6 +34,12 @@ function cardsPost() // to generate a new card
     // check user is signed in
     if (!validateSession()) {
         handle_error("INVALID_SESSION");
+        return;
+    }
+
+    // check csrf
+    if(!validateCSRFToken()){
+        handle_error("INVALID_CSRF_TOKEN");
         return;
     }
 
@@ -97,6 +104,12 @@ function cardsPatch() // to add an attribute
         return;
     }
 
+    // check csrf
+    if(!validateCSRFToken()){
+        handle_error("INVALID_CSRF_TOKEN");
+        return;
+    }
+
     // check user permission
     if (!doesUserHavePermission($_SESSION["username"], "MODIFY_CARD")) {
         handle_error("MISSING_PERMISSION");
@@ -149,6 +162,12 @@ function cardsDelete() // delete a card
     // check user is signed in
     if (!validateSession()) {
         handle_error("INVALID_SESSION");
+        return;
+    }
+
+    // check csrf
+    if(!validateCSRFToken()){
+        handle_error("INVALID_CSRF_TOKEN");
         return;
     }
 

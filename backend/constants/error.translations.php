@@ -79,6 +79,9 @@ $errors = array(
     "SHORT_MISSING_CARDNAME" => array(
         "FRENCH" => "Le nom de carte dois avoir au moins 4 caractères"
     ),
+    "INVALID_CSRF_TOKEN" =>array(
+        "FRENCH" => "Jeton CSRF Invalide"
+    ),
     "WTF" => array(
         "FRENCH" => "WTF???"
     ),

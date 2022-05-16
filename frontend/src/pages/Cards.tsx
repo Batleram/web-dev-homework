@@ -17,7 +17,7 @@ export const Cards = () => {
     const [showAddAtributeModal, setShowAddAttributeModal]: [boolean, Function] = useState<boolean>(false);
     const [currentlySelectedCard, setCurrentlySelectedCard]: [Card, Function] = useState<Card>({} as Card);
 
-    const getCards = () => {
+    const getCards = async () => {
         fetch("/api/v1/cards.php", { method: "GET" })
             .then(res => {
                 if (res.status === 200) {
@@ -115,13 +115,15 @@ export const Cards = () => {
 const NameModal = (props: { closeModal: Function }) => {
     const [error, setError]: [string, Function] = useState<string>("");
 
-    const handleModalSubmit = () => {
+    const handleModalSubmit = async () => {
         let inputElement = document.getElementById("modal-name-input") as HTMLInputElement;
         let inputText = inputElement.value;
 
+        let csrfToken = await fetch("/api/v1/getcsrftoken.php").then(res=> res.json()).catch(e => console.error(e));
         fetch("/api/v1/cards.php", {
             method: "POST",
             headers: {
+                "X-CSRF-TOKEN": csrfToken.CSRF_TOKEN,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -184,16 +186,18 @@ const AddAttributeModal = (props: { closeModal: Function, card: Card }) => {
             });
     }, [])
 
-    const handleModalSubmit = () => {
+    const handleModalSubmit = async () => {
         const attributeElement = document.getElementById("attribute-type") as HTMLSelectElement;
         let attributeType = attributeElement.value;
         const attributeValueElement = document.getElementById("attribute-value") as HTMLInputElement;
         let attributeValue = attributeValueElement.value;
 
 
+        let csrfToken = await fetch("/api/v1/getcsrftoken.php").then(res=> res.json()).catch(e => console.error(e));
         fetch("/api/v1/cards.php", {
             method: "PATCH",
             headers: {
+                "X-CSRF-TOKEN": csrfToken.CSRF_TOKEN,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -239,10 +243,12 @@ const AddAttributeModal = (props: { closeModal: Function, card: Card }) => {
 const DeleteConfirmModal = (props: { closeModal: Function, card: Card }) => {
     const [error, setError]: [string, Function] = useState<string>("");
 
-    const handleModalSubmit = () => {
+    const handleModalSubmit = async () => {
+        let csrfToken = await fetch("/api/v1/getcsrftoken.php").then(res=> res.json()).catch(e => console.error(e));
         fetch("/api/v1/cards.php", {
             method: "DELETE",
             headers: {
+                "X-CSRF-TOKEN":csrfToken.CSRF_TOKEN,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -279,10 +285,12 @@ const DeleteConfirmModal = (props: { closeModal: Function, card: Card }) => {
 
 const TradeModal = (props: { closeModal: Function, card: Card }) => {
     const [error, setError]: [string, Function] = useState<string>("");
-    const handleModalSubmit = () => {
+    const handleModalSubmit = async() => {
+        let csrfToken = await fetch("/api/v1/getcsrftoken.php").then(res=> res.json()).catch(e => console.error(e));
         fetch("/api/v1/trade.php", {
             method: "POST",
             headers: {
+                "X-CSRF-TOKEN":csrfToken.CSRF_TOKEN,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
