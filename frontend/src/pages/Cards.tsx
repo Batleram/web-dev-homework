@@ -149,8 +149,10 @@ const NameModal = (props: { closeModal: Function }) => {
             <div className="ui-blocker"></div>
             <div className="modal">
                 <input id="modal-name-input"></input>
-                <button onClick={handleModalSubmit}>Gen Card</button>
-                <button onClick={() => props.closeModal()}>Close</button>
+                <div className="card-buttons">
+                    <button onClick={handleModalSubmit}>Gen Card</button>
+                    <button onClick={() => props.closeModal()}>Close</button>
+                </div>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
                 }
@@ -224,14 +226,18 @@ const AddAttributeModal = (props: { closeModal: Function, card: Card }) => {
         <>
             <div className="ui-blocker"></div>
             <div className="modal">
-                <select id="attribute-type">
-                    {possibleAttributes.map((val, id) => (
-                        <option value={val} key={id}>{val}</option>
-                    ))}
-                </select>
-                <input id="attribute-value" type="number" min="1" max="5" placeholder="Value"/>
-                <button onClick={handleModalSubmit}>Save Attribute</button>
-                <button onClick={() => props.closeModal()}>Close</button>
+                <div className="attribute-setting-container">
+                    <select id="attribute-type">
+                        {possibleAttributes.map((val, id) => (
+                            <option value={val} key={id}>{val}</option>
+                        ))}
+                    </select>
+                    <input id="attribute-value" type="number" min="1" max="5" placeholder="Value"/>
+                </div>
+                <div className="card-buttons">
+                    <button onClick={handleModalSubmit}>Save Attribute</button>
+                    <button onClick={() => props.closeModal()}>Close</button>
+                </div>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
                 }
@@ -273,8 +279,10 @@ const DeleteConfirmModal = (props: { closeModal: Function, card: Card }) => {
         <>
             <div className="ui-blocker"></div>
             <div className="modal">
-                <button onClick={handleModalSubmit}>Confirm</button>
-                <button onClick={() => props.closeModal()}>Close</button>
+                <div className="card-buttons">
+                    <button onClick={handleModalSubmit}>Confirm</button>
+                    <button onClick={() => props.closeModal()}>Close</button>
+                </div>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
                 }
@@ -317,8 +325,10 @@ const TradeModal = (props: { closeModal: Function, card: Card }) => {
             <div className="ui-blocker"></div>
             <div className="modal">
                 <Card card={props.card} showButtons={false} />
-                <button onClick={handleModalSubmit}>Trade card</button>
-                <button onClick={() => props.closeModal()}>Close</button>
+                <div className="card-buttons">
+                    <button onClick={handleModalSubmit}>Trade card</button>
+                    <button onClick={() => props.closeModal()}>Close</button>
+                </div>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
                 }
@@ -366,11 +376,11 @@ const Card = (props: { card: Card, cardTrade?: Function, cardDelete?: Function, 
         <div className="card">
             <h1>{[props.card.name]}</h1>
             {props.showButtons &&
-                <>
+                <div className="card-buttons">
                     <button onClick={handleTradeButtonClick}>trade</button>
                     <button onClick={handleDeleteButtonClick}>delete</button>
                     <button onClick={handleAddAttributeClick}>add attribute</button>
-                </>
+                </div>
             }
             <div className="card-image">
                 <Canvas camera={camera} >

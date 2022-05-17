@@ -60,6 +60,24 @@
     color: var(--color1);
 }
 
+.card-buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.card-buttons button{
+    text-transform: capitalize;
+    width: max-content;
+    padding: 3px 5px;
+    height: 30px;
+    background-color: var(--color4);
+    border-radius: 15px;
+    border-style:none;
+    margin: 5px 0px;
+}
+
 #cards-error-message{
     text-align: center;
     color:var(--color1);
@@ -71,8 +89,9 @@
     margin-top: 10px;
     margin-left: auto;
     width: 20vw;
-    justify-content:space-evenly;
+    justify-content:right;
 }
+
 
 .card-action{
     cursor: pointer;
@@ -86,6 +105,7 @@
     justify-content: center;
     border: none;
     border-radius: 10px;
+    margin: auto 30px;
 }
 
 .card-action:hover{
@@ -117,4 +137,23 @@
     left:0;
     right:0;
     z-index:100;
+}
+
+.attribute-setting-container{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    height: 30px;
+}
+
+.attribute-setting-container select{
+    grid-column: 1;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+}
+
+.attribute-setting-container input{
+    grid-column: 2;
+    width: 100%;
+    height: 26px;
 }
