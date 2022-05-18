@@ -150,8 +150,8 @@ const NameModal = (props: { closeModal: Function }) => {
             <div className="modal">
                 <input id="modal-name-input"></input>
                 <div className="card-buttons">
-                    <button onClick={handleModalSubmit}>Gen Card</button>
-                    <button onClick={() => props.closeModal()}>Close</button>
+                    <button onClick={handleModalSubmit}>Générer la carte</button>
+                    <button onClick={() => props.closeModal()}>Fermer</button>
                 </div>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
@@ -235,8 +235,8 @@ const AddAttributeModal = (props: { closeModal: Function, card: Card }) => {
                     <input id="attribute-value" type="number" min="1" max="5" placeholder="Value"/>
                 </div>
                 <div className="card-buttons">
-                    <button onClick={handleModalSubmit}>Save Attribute</button>
-                    <button onClick={() => props.closeModal()}>Close</button>
+                    <button onClick={handleModalSubmit}>💾</button>
+                    <button onClick={() => props.closeModal()}>Fermer</button>
                 </div>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
@@ -280,8 +280,8 @@ const DeleteConfirmModal = (props: { closeModal: Function, card: Card }) => {
             <div className="ui-blocker"></div>
             <div className="modal">
                 <div className="card-buttons">
-                    <button onClick={handleModalSubmit}>Confirm</button>
-                    <button onClick={() => props.closeModal()}>Close</button>
+                    <button onClick={handleModalSubmit}>✓</button>
+                    <button onClick={() => props.closeModal()}>Fermer</button>
                 </div>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
@@ -326,8 +326,8 @@ const TradeModal = (props: { closeModal: Function, card: Card }) => {
             <div className="modal">
                 <Card card={props.card} showButtons={false} />
                 <div className="card-buttons">
-                    <button onClick={handleModalSubmit}>Trade card</button>
-                    <button onClick={() => props.closeModal()}>Close</button>
+                    <button onClick={handleModalSubmit}>↺</button>
+                    <button onClick={() => props.closeModal()}>Fermer</button>
                 </div>
                 {error !== "" &&
                     <p id="modal-error-message">{error}</p>
@@ -377,9 +377,9 @@ const Card = (props: { card: Card, cardTrade?: Function, cardDelete?: Function, 
             <h1>{[props.card.name]}</h1>
             {props.showButtons &&
                 <div className="card-buttons">
-                    <button onClick={handleTradeButtonClick}>trade</button>
-                    <button onClick={handleDeleteButtonClick}>delete</button>
-                    <button onClick={handleAddAttributeClick}>add attribute</button>
+                    <button onClick={handleTradeButtonClick}>Échanger</button>
+                    <button onClick={handleDeleteButtonClick}>Supprimer</button>
+                    <button onClick={handleAddAttributeClick}>Ajouter Attribut</button>
                 </div>
             }
             <div className="card-image">
