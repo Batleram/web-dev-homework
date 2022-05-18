@@ -4,6 +4,7 @@ include_once ROOT . '/helpers/error.handler.php';
 include_once ROOT . "/services/sessionManagement.service.php";
 include_once ROOT . "/services/cardManagement.service.php";
 include_once ROOT . "/services/userManagement.service.php";
+include_once ROOT . "/services/csrftoken.service.php";
 include_once ROOT . "/models/card.php";
 
 

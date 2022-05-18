@@ -10,16 +10,3 @@ function getCSRFToken()
     $_SESSION["CSRF_TOKEN"] = $CSRF_TOKEN;
     echo json_encode(array("CSRF_TOKEN" => $CSRF_TOKEN));
 }
-
-function validateCSRFToken()
-{
-    startSession();
-    $json_body = json_decode(file_get_contents("php://input"), true);
-
-    if(!isset($json_body["CSRF_TOKEN"])){
-        return false;
-    }
-
-    return $json_body["CSRF_TOKEN"] == $_SESSION["CSRF_TOKEN"];
-
-}
